@@ -82,9 +82,10 @@ if [[ "$sdk_choice" == "go" || "$sdk_choice" == "both" ]]; then
     git push origin "$new_tag"
 fi
 
+git commit -m "Bump version to $new_version"
+
 # Clean up backup files created by sed
 find . -name "*.bak" -type f -delete
-
 git push
 
 echo "Version bumping completed."
