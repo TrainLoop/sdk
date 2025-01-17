@@ -59,7 +59,7 @@ func (t *Trainloop) SendData(messages []Message, sampleFeedback SampleFeedbackTy
 	}
 
 	// Create the request
-	req, err := http.NewRequest("POST", "https://trainloop.ai/api/datasets/collect", bytes.NewBuffer(body))
+	req, err := http.NewRequest("POST", "https://app.trainloop.ai/api/datasets/collect", bytes.NewBuffer(body))
 	if err != nil {
 		return false, fmt.Errorf("could not create request: %w", err)
 	}
