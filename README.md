@@ -13,7 +13,7 @@ pip install trainloop-sdk
 ### Go
 
 ```bash
-go get github.com/TrainLoop/sdk@v0.0.3
+go get github.com/TrainLoop/sdk@v0.0.4
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ if apiKey == "" {
 }
 
 // 3. Initialize the SDK
-client := trainloop.NewTrainloop(apiKey)
+client := trainloop.NewClient(apiKey)
 
 // 4. Do some inference and generate some message thread
 messages := []trainloop.Message{

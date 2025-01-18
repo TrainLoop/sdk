@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	client := trainloop.NewTrainloop("tl-1234567890")
+	client := trainloop.NewClient("tl-1234567890")
 
 	messages := []trainloop.Message{
 		{Role: "user", Content: "Hello, from the user"},

@@ -9,14 +9,14 @@ import (
 	"time"
 )
 
-// Trainloop represents the configuration needed to authenticate and send data
-type Trainloop struct {
+// Client represents the configuration needed to authenticate and send data
+type Client struct {
 	APIKey string
 }
 
-// NewTrainloop initializes a new Trainloop client with an API key
-func NewTrainloop(apiKey string) *Trainloop {
-	return &Trainloop{
+// NewClient initializes a new Trainloop client with an API key
+func NewClient(apiKey string) *Client {
+	return &Client{
 		APIKey: apiKey,
 	}
 }
@@ -24,8 +24,8 @@ func NewTrainloop(apiKey string) *Trainloop {
 // Message represents the messages you’re sending to TrainLoop.
 // Adjust fields as required by your system.
 type Message struct {
-	Role    string `json:"role"`
-	Content string `json:"content,omitempty"`
+	Role    string      `json:"role"`
+	Content interface{} `json:"content"`
 }
 
 type SampleFeedbackType string
@@ -44,7 +44,7 @@ type requestPayload struct {
 
 // SendData sends your data to the TrainLoop API.
 // Returns true on success, or false plus an error if something went wrong.
-func (t *Trainloop) SendData(messages []Message, sampleFeedback SampleFeedbackType, datasetID string) (bool, error) {
+func (t *Client) SendData(messages []Message, sampleFeedback SampleFeedbackType, datasetID string) (bool, error) {
 	// Construct the payload
 	payload := requestPayload{
 		Messages:       messages,
