@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 )
@@ -44,7 +43,7 @@ type requestPayload struct {
 
 // SendData sends your data to the TrainLoop API.
 // Returns true on success, or false plus an error if something went wrong.
-func (t *Client) SendData(messages []Message, sampleFeedback SampleFeedbackType, datasetID string) (bool, error) {
+func (t *Client) SendData(messages []Message, sampleFeedback SampleFeedbackType, datasetID string) error {
 	// Construct the payload
 	payload := requestPayload{
 		Messages:       messages,
@@ -55,13 +54,13 @@ func (t *Client) SendData(messages []Message, sampleFeedback SampleFeedbackType,
 	// Convert payload to JSON
 	body, err := json.Marshal(payload)
 	if err != nil {
-		return false, fmt.Errorf("could not marshal payload: %w", err)
+		return err
 	}
 
 	// Create the request
 	req, err := http.NewRequest("POST", "https://app.trainloop.ai/api/datasets/collect", bytes.NewBuffer(body))
 	if err != nil {
-		return false, fmt.Errorf("could not create request: %w", err)
+		return err
 	}
 
 	// Set appropriate headers
@@ -75,14 +74,14 @@ func (t *Client) SendData(messages []Message, sampleFeedback SampleFeedbackType,
 	// Send the request
 	resp, err := client.Do(req)
 	if err != nil {
-		return false, fmt.Errorf("request failed: %w", err)
+		return err
 	}
 	defer resp.Body.Close()
 
 	// Check for successful status code
 	if resp.StatusCode != http.StatusOK {
-		return false, errors.New("request returned non-200 status code: " + resp.Status)
+		return errors.New("request returned non-200 status code: " + resp.Status)
 	}
 
-	return true, nil
+	return nil
 }

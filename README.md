@@ -13,7 +13,7 @@ pip install trainloop-sdk
 ### Go
 
 ```bash
-go get github.com/TrainLoop/sdk@v0.0.4
+go get -u github.com/TrainLoop/sdk@v0.0.4
 ```
 
 ## Usage
