@@ -3,20 +3,33 @@ package trainloop
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
+	"fmt"
+	"io"
 	"net/http"
 	"time"
 )
 
 // Client represents the configuration needed to authenticate and send data
 type Client struct {
-	APIKey string
+	APIKey     string
+	HTTPClient *http.Client
 }
 
-// NewClient initializes a new Trainloop client with an API key
+// NewClient initializes a new TrainLoop client with an API key
 func NewClient(apiKey string) *Client {
+	transport := &http.Transport{
+		MaxIdleConns:        100,
+		MaxIdleConnsPerHost: 100,
+		MaxConnsPerHost:     100,
+		IdleConnTimeout:     90 * time.Second,
+	}
+
 	return &Client{
 		APIKey: apiKey,
+		HTTPClient: &http.Client{
+			Timeout:   10 * time.Second,
+			Transport: transport,
+		},
 	}
 }
 
@@ -42,7 +55,7 @@ type requestPayload struct {
 }
 
 // SendData sends your data to the TrainLoop API.
-// Returns true on success, or false plus an error if something went wrong.
+// Returns nil on success, or an error if something went wrong.
 func (t *Client) SendData(messages []Message, sampleFeedback SampleFeedbackType, datasetID string) error {
 	// Construct the payload
 	payload := requestPayload{
@@ -67,12 +80,8 @@ func (t *Client) SendData(messages []Message, sampleFeedback SampleFeedbackType,
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+t.APIKey)
 
-	client := &http.Client{
-		Timeout: 10 * time.Second,
-	}
-
-	// Send the request
-	resp, err := client.Do(req)
+	// Send the request using the stored HTTPClient
+	resp, err := t.HTTPClient.Do(req)
 	if err != nil {
 		return err
 	}
@@ -80,7 +89,9 @@ func (t *Client) SendData(messages []Message, sampleFeedback SampleFeedbackType,
 
 	// Check for successful status code
 	if resp.StatusCode != http.StatusOK {
-		return errors.New("request returned non-200 status code: " + resp.Status)
+		// Read the response body for more detailed error message
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("request returned non-200 status code: %s, body: %s", resp.Status, string(bodyBytes))
 	}
 
 	return nil
