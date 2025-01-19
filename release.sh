@@ -49,10 +49,14 @@ echo "Enter the type of version bump (major, minor, patch):"
 read -r bump_type
 bump_type=${bump_type:-patch}  # Default to patch if no input
 
+# Clean up backup files created by sed
+find . -name "*.bak" -type f -delete
+
 # Ask the user which SDKs to bump
 echo "Select SDKs to bump (python, go, both):"
 read -r sdk_choice
 sdk_choice=${sdk_choice:-both}  # Default to both if no input
+
 
 # Bump version for selected SDKs
 if [[ "$sdk_choice" == "python" || "$sdk_choice" == "both" ]]; then
@@ -60,6 +64,9 @@ if [[ "$sdk_choice" == "python" || "$sdk_choice" == "both" ]]; then
     python_version_regex="version = \"[0-9]+\.[0-9]+\.[0-9]+\""
     bump_version_in_file "$python_setup_file" "$python_version_regex" "$bump_type"
     git add python/pyproject.toml
+    git commit -m "Bump version to $new_version"
+
+    git push
 fi
 
 if [[ "$sdk_choice" == "go" || "$sdk_choice" == "both" ]]; then
@@ -79,13 +86,10 @@ if [[ "$sdk_choice" == "go" || "$sdk_choice" == "both" ]]; then
 
     # Create and push the new tag
     git tag "$new_tag"
+
+    # Push commits and new tag
+    git push origin HEAD
     git push origin "$new_tag"
 fi
-
-git commit -m "Bump version to $new_version"
-
-# Clean up backup files created by sed
-find . -name "*.bak" -type f -delete
-git push
 
 echo "Version bumping completed."
