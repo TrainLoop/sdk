@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import List, Dict, Union
 import requests
 
 
@@ -26,7 +27,7 @@ class Trainloop:
 
     def send_data(
         self,
-        messages,
+        messages: List[Dict[str, Union[str, dict]]],
         dataset_id: str,
         sample_feedback: SampleFeedbackType = SampleFeedbackType.GOOD,
     ) -> bool:
@@ -38,7 +39,7 @@ class Trainloop:
                     {"role": "system", "content": "..."},
                     {"role": "user", "content": "..."}
                 ]
-        :param sample_feedback: A string indicating the user feedback, e.g. "good" or "bad".
+        :param sample_feedback: A SampleFeedbackType indicating the user feedback, e.g. GOOD or BAD.
         :param dataset_id: The ID of the dataset to send the data to.
         :return: True if the request succeeded (status_code == 200), else False.
         """
@@ -46,7 +47,7 @@ class Trainloop:
         url = f"{self.base_url}/api/datasets/collect"
         payload = {
             "messages": messages,
-            "sample_feedback": sample_feedback,
+            "sample_feedback": sample_feedback.value,  # Use .value to get the string representation
             "dataset_id": dataset_id,
         }
 
@@ -57,6 +58,7 @@ class Trainloop:
             if response.status_code == 200:
                 return True
 
+            # Read the response body for more detailed error message
             print(f"Request returned status {response.status_code}: {response.text}")
             return False
         except requests.RequestException as e:

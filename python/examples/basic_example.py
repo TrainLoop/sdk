@@ -1,5 +1,5 @@
 import os
-from trainloop.client import Trainloop
+from trainloop.client import Trainloop, SampleFeedbackType
 
 
 def main():
@@ -14,7 +14,7 @@ def main():
 
     # Send data
     success = client.send_data(
-        messages, sample_feedback="good", dataset_id="test-dataset"
+        messages, sample_feedback=SampleFeedbackType.GOOD, dataset_id="test-dataset"
     )
     if success:
         print("Data sent successfully!")

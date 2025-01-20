@@ -57,7 +57,6 @@ echo "Select SDKs to bump (python, go, both):"
 read -r sdk_choice
 sdk_choice=${sdk_choice:-both}  # Default to both if no input
 
-
 # Bump version for selected SDKs
 if [[ "$sdk_choice" == "python" || "$sdk_choice" == "both" ]]; then
     python_setup_file="python/pyproject.toml"
@@ -65,6 +64,20 @@ if [[ "$sdk_choice" == "python" || "$sdk_choice" == "both" ]]; then
     bump_version_in_file "$python_setup_file" "$python_version_regex" "$bump_type"
     git add python/pyproject.toml
     git commit -m "Bump version to $new_version"
+
+    cd python || exit
+    # clean up dist folder
+    rm -rf dist
+    # build the package
+    python -m build
+
+    # Upload the package to PyPI
+    twine upload dist/*
+
+    cd - || exit
+
+    # Clean up backup files created by twine
+    find . -name "*.bak" -type f -delete
 
     git push
 fi
