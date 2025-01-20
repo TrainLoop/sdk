@@ -18,7 +18,7 @@ class Trainloop:
 
     def __init__(self, api_key: str):
         self.api_key = api_key
-        self.base_url = "https://trainloop.ai"
+        self.base_url = "https://app.trainloop.ai"
         self.headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}",

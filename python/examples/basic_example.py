@@ -1,26 +1,16 @@
+import os
 from trainloop.client import Trainloop
-from openai import OpenAI
 
 
 def main():
     # Initialize the TrainLoop client with your api key
-    client = Trainloop(api_key="tl_...")
+    client = Trainloop(api_key=os.getenv("TRAINLOOP_API_KEY"))
 
     # Example messages
     messages = [
         {"role": "system", "content": "System message here"},
         {"role": "user", "content": "Hello from the user!"},
     ]
-    openai_client = OpenAI()
-
-    # Make an openai request
-    openai_response = openai_client.chat.completions.create(
-        model="gpt-4o",
-        messages=messages,
-    )
-
-    chat_thread = openai_response.choices[0].message
-    print(chat_thread)
 
     # Send data
     success = client.send_data(
