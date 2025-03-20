@@ -1,7 +1,7 @@
 [project]
 name = "trainloop-sdk"
 version = "0.1.6"
-description = "A Data "
+description = "A Data Collection SDK for TrainLoop"
 authors = [{ name = "TrainLoop", email = "hello@trainloop.ai" }]
 dependencies = ["requests>=2.32.3"]
 urls = { "Homepage" = "https://github.com/trainloop/sdk" }

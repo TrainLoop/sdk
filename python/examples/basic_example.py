@@ -1,10 +1,13 @@
 import os
-from trainloop.client import Trainloop, SampleFeedbackType
+from trainloop import Client, SampleFeedbackType
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def main():
     # Initialize the TrainLoop client with your api key
-    client = Trainloop(api_key=os.getenv("TRAINLOOP_API_KEY"))
+    client = Client(api_key=os.getenv("TRAINLOOP_API_KEY"))
 
     # Example messages
     messages = [

@@ -2,9 +2,9 @@
 TrainLoop Python SDK
 
 This file ensures that 'trainloop' is treated as a Python package and
-exports the Trainloop class for easy import.
+exports the Client class for easy import.
 """
 
-from .client import Trainloop, SampleFeedbackType
+from .trainloop import Client, SampleFeedbackType
 
-__all__ = ["Trainloop", "SampleFeedbackType"]
+__all__ = ["Client", "SampleFeedbackType"]

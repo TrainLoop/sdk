@@ -53,17 +53,17 @@ bump_type=${bump_type:-patch}  # Default to patch if no input
 find . -name "*.bak" -type f -delete
 
 # Ask the user which SDKs to bump
-echo "Select SDKs to bump (python, go, both):"
+echo "Select SDKs to bump (python, go, typescript, all):"
 read -r sdk_choice
-sdk_choice=${sdk_choice:-both}  # Default to both if no input
+sdk_choice=${sdk_choice:-all}  # Default to all if no input
 
 # Bump version for selected SDKs
-if [[ "$sdk_choice" == "python" || "$sdk_choice" == "both" ]]; then
+if [[ "$sdk_choice" == "python" || "$sdk_choice" == "all" ]]; then
     python_setup_file="python/pyproject.toml"
     python_version_regex="version = \"[0-9]+\.[0-9]+\.[0-9]+\""
     bump_version_in_file "$python_setup_file" "$python_version_regex" "$bump_type"
     git add python/pyproject.toml
-    git commit -m "Bump version to $new_version"
+    git commit -m "Bump Python version to $new_version"
 
     cd python || exit
     # clean up dist folder
@@ -82,7 +82,29 @@ if [[ "$sdk_choice" == "python" || "$sdk_choice" == "both" ]]; then
     git push
 fi
 
-if [[ "$sdk_choice" == "go" || "$sdk_choice" == "both" ]]; then
+if [[ "$sdk_choice" == "typescript" || "$sdk_choice" == "all" ]]; then
+    typescript_package_file="typescript/package.json"
+    typescript_version_regex="\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\""
+    bump_version_in_file "$typescript_package_file" "$typescript_version_regex" "$bump_type"
+    git add typescript/package.json
+    git commit -m "Bump TypeScript version to $new_version"
+
+    cd typescript || exit
+    # Build the package
+    npm run build
+
+    # Publish to npm registry
+    npm publish
+
+    # Clean up backup files created by npm
+    find . -name "*.bak" -type f -delete
+
+    cd - || exit
+
+    git push
+fi
+
+if [[ "$sdk_choice" == "go" || "$sdk_choice" == "all" ]]; then
     # Fetch the latest tags
     git fetch --tags
 
