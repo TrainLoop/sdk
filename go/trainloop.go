@@ -12,11 +12,17 @@ import (
 // Client represents the configuration needed to authenticate and send data
 type Client struct {
 	APIKey     string
+	BaseURL    string
 	HTTPClient *http.Client
 }
 
 // NewClient initializes a new TrainLoop client with an API key
-func NewClient(apiKey string) *Client {
+func NewClient(apiKey string, baseURL ...string) *Client {
+	url := "https://app.trainloop.ai"
+	if len(baseURL) > 0 {
+		url = baseURL[0]
+	}
+
 	transport := &http.Transport{
 		MaxIdleConns:        100,
 		MaxIdleConnsPerHost: 100,
@@ -25,7 +31,8 @@ func NewClient(apiKey string) *Client {
 	}
 
 	return &Client{
-		APIKey: apiKey,
+		APIKey:  apiKey,
+		BaseURL: url,
 		HTTPClient: &http.Client{
 			Timeout:   10 * time.Second,
 			Transport: transport,
@@ -71,7 +78,7 @@ func (t *Client) SendData(messages []Message, sampleFeedback SampleFeedbackType,
 	}
 
 	// Create the request
-	req, err := http.NewRequest("POST", "https://app.trainloop.ai/api/datasets/collect", bytes.NewBuffer(body))
+	req, err := http.NewRequest("POST", t.BaseURL+"/api/datasets/collect", bytes.NewBuffer(body))
 	if err != nil {
 		return err
 	}

@@ -1,11 +1,11 @@
 [project]
 name = "trainloop-sdk"
-version = "0.1.7"
+version = "0.1.8"
 description = "A Data Collection SDK for TrainLoop"
 authors = [{ name = "TrainLoop", email = "hello@trainloop.ai" }]
 dependencies = ["requests>=2.32.3"]
 urls = { "Homepage" = "https://github.com/trainloop/sdk" }
 
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = ["setuptools>=42", "wheel", "build>=0.10.0"]
 build-backend = "setuptools.build_meta"

@@ -32,7 +32,7 @@ bump_version_in_file() {
     local current_version=$(echo "$version_line" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
     
     if [ -z "$current_version" ]; then
-        echo "No version found in $file"
+        echo "No version found in $file" >&2
         return
     fi
 
@@ -41,7 +41,10 @@ bump_version_in_file() {
 
     # Replace the old version with the new version
     sed -i.bak -E "s/$current_version/$new_version/" "$file"
-    echo "Updated $file from $current_version to $new_version"
+    echo "Updated $file from $current_version to $new_version" >&2
+    
+    # Return the new version so it can be captured
+    echo "$new_version"
 }
 
 # Ask the user for the type of version bump
@@ -61,13 +64,18 @@ sdk_choice=${sdk_choice:-all}  # Default to all if no input
 if [[ "$sdk_choice" == "python" || "$sdk_choice" == "all" ]]; then
     python_setup_file="python/pyproject.toml"
     python_version_regex="version = \"[0-9]+\.[0-9]+\.[0-9]+\""
-    bump_version_in_file "$python_setup_file" "$python_version_regex" "$bump_type"
+    new_version=$(bump_version_in_file "$python_setup_file" "$python_version_regex" "$bump_type")
     git add python/pyproject.toml
     git commit -m "Bump Python version to $new_version"
 
     cd python || exit
+
     # clean up dist folder
     rm -rf dist
+
+    # source the venv
+    source venv/bin/activate
+
     # build the package
     python -m build
 
@@ -85,7 +93,7 @@ fi
 if [[ "$sdk_choice" == "typescript" || "$sdk_choice" == "all" ]]; then
     typescript_package_file="typescript/package.json"
     typescript_version_regex="\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\""
-    bump_version_in_file "$typescript_package_file" "$typescript_version_regex" "$bump_type"
+    new_version=$(bump_version_in_file "$typescript_package_file" "$typescript_version_regex" "$bump_type")
     git add typescript/package.json
     git commit -m "Bump TypeScript version to $new_version"
 
