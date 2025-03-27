@@ -103,7 +103,7 @@ if success {
 ### TypeScript
 
 ```typescript
-import { Client, SampleFeedbackType } from 'trainloop-sdk';
+import { Client, SampleFeedbackType } from '@trainloop/sdk';
 import * as dotenv from 'dotenv';
 
 async function main() {
