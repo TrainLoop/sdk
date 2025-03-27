@@ -37,7 +37,7 @@ bump_version_in_file() {
     fi
 
     IFS='.' read -r -a version_parts <<< "$current_version"
-    local new_version=$(bump_version_parts "${version_parts[@]}" "$bump_type")
+    new_version=$(bump_version_parts "${version_parts[@]}" "$bump_type")
 
     # Replace the old version with the new version
     sed -i.bak -E "s/$current_version/$new_version/" "$file"
