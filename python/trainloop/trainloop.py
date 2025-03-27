@@ -18,7 +18,7 @@ class Client:
     A client for sending message data to TrainLoop.
     """
 
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str, base_url: str = "https://app.trainloop.ai"):
         """
         Initialize a new TrainLoop client with an API key
 
@@ -28,7 +28,7 @@ class Client:
             raise ValueError("API key is required")
 
         self.api_key = api_key
-        self.base_url = "https://app.trainloop.ai"
+        self.base_url = base_url
         self.headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}",

@@ -29,9 +29,9 @@ export class Client {
    * 
    * @param apiKey Authentication API key for TrainLoop
    */
-  constructor(apiKey: string) {
+  constructor(apiKey: string, baseUrl: string = 'https://app.trainloop.ai') {
     this.apiKey = apiKey;
-    this.baseUrl = 'https://app.trainloop.ai';
+    this.baseUrl = baseUrl;
 
     // Create an axios instance with detailed configuration to match other SDKs
     const config: AxiosRequestConfig = {
