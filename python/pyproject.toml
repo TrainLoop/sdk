@@ -1,6 +1,6 @@
 [project]
 name = "trainloop-sdk"
-version = "0.1.8"
+version = "0.1.9"
 description = "A Data Collection SDK for TrainLoop"
 authors = [{ name = "TrainLoop", email = "hello@trainloop.ai" }]
 dependencies = ["requests>=2.32.3"]
