@@ -1,2 +1,2 @@
 python-dotenv>=0.21.0
-trainloop-sdk
+trainloop-sdk>=0.1.10
