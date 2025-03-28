@@ -36,6 +36,6 @@ go mod tidy
 cd ..
 
 echo "Setup complete! You can now run examples using the following commands:"
-echo "  npm run run:ts    # Run TypeScript example"
-echo "  npm run run:py    # Run Python example"
-echo "  npm run run:go    # Run Go example"
+echo "  npm run ts:basic    # Run TypeScript example"
+echo "  npm run py:basic    # Run Python example"
+echo "  npm run go:basic    # Run Go example"
