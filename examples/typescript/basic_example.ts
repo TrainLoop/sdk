@@ -1,4 +1,4 @@
-import { Client, SampleFeedbackType } from '../src';
+import { Client, SampleFeedbackType } from '@trainloop/sdk';
 import * as dotenv from 'dotenv';
 
 // Load environment variables
