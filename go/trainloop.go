@@ -40,12 +40,8 @@ func NewClient(apiKey string, baseURL ...string) *Client {
 	}
 }
 
-// Message represents the messages you’re sending to TrainLoop.
-// Adjust fields as required by your system.
-type Message struct {
-	Role    string      `json:"role"`
-	Content interface{} `json:"content"`
-}
+// Message represents a message with string keys and string values.
+type Message map[string]string
 
 type SampleFeedbackType string
 

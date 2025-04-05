@@ -48,7 +48,7 @@ class Client:
 
     def send_data(
         self,
-        messages: List[Dict[str, Union[str, dict]]],
+        messages: List[Dict[str, str]],
         sample_feedback: Literal[SampleFeedbackType.BAD, SampleFeedbackType.GOOD],
         dataset_id: str,
     ) -> bool:

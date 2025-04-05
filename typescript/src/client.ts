@@ -9,14 +9,6 @@ export class SampleFeedbackType {
 }
 
 /**
- * Type for message structure
- */
-export interface Message {
-  role: string;
-  content: string | object;
-}
-
-/**
  * A client for sending message data to TrainLoop.
  */
 export class Client {
@@ -49,17 +41,13 @@ export class Client {
   /**
    * Sends messages and sample feedback to the TrainLoop API.
    * 
-   * @param messages A list of objects containing role and content, e.g.:
-   *        [
-   *          { role: "system", content: "..." },
-   *          { role: "user", content: "..." }
-   *        ]
+   * @param messages A list of objects containing
    * @param sampleFeedback A feedback type string, either SampleFeedbackType.GOOD or SampleFeedbackType.BAD
    * @param datasetId The ID of the dataset to send the data to
    * @returns A Promise that resolves to true if successful, false otherwise
    */
   async sendData(
-    messages: Message[],
+    messages: Record<string, string>[],
     sampleFeedback: typeof SampleFeedbackType.GOOD | typeof SampleFeedbackType.BAD,
     datasetId: string
   ): Promise<boolean> {
