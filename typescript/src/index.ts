@@ -1,1 +1,1 @@
-export { Client, SampleFeedbackType, Message } from './client';
+export { Client, SampleFeedbackType } from './client';
