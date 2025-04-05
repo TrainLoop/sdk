@@ -3,9 +3,9 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 /**
  * Constants for sample feedback type.
  */
-export class SampleFeedbackType {
-  static readonly GOOD: string = 'good';
-  static readonly BAD: string = 'bad';
+export enum SampleFeedbackType {
+  GOOD = 'good',
+  BAD = 'bad'
 }
 
 /**
@@ -48,7 +48,7 @@ export class Client {
    */
   async sendData(
     messages: Record<string, string>[],
-    sampleFeedback: typeof SampleFeedbackType.GOOD | typeof SampleFeedbackType.BAD,
+    sampleFeedback: SampleFeedbackType,
     datasetId: string
   ): Promise<boolean> {
     const url = `${this.baseUrl}/api/datasets/collect`;
